@@ -35,7 +35,7 @@ terraform validate
 Check the plan
 
 ```bash
-terraform plan
+terraform plan -out=test-plan.tfplan
 ```
 
 Apply infrastructure
