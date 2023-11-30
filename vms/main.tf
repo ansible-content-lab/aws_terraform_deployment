@@ -2,15 +2,16 @@ provider "aws" {
   region = var.aws_region
 }
 
-variable "dep_id" {}
+variable "deployment_id" {}
+variable "instance_name_suffix" {}
 
 variable "app_tag" {
   description = "Tag value for AAP component"
   validation {
-    condition     = var.app_tag == "controller" || var.app_tag == "hub"
+    condition = var.app_tag == "controller" || var.app_tag == "hub"
     error_message = "Invalid app_tag. Valid values are 'controller' or 'hub'."
   }
-  type    = string
+  type = string
   default = "controller"
 }
 
@@ -22,19 +23,12 @@ variable "aws_region" {
 
 variable "vm_name_prefix" {
   description = "Name of ec2 instance"
-  type    = string
+  type = string
   default = "<vm_name>"
 }
 
-resource "random_string" "instance_name_suffix" {
-  length  = 8
-  special = false
-  upper   = false
-  numeric  = false
-}
-
 resource "aws_instance" "aapvm" {
-  ami           = "<image_id>"
+  ami = "<image_id>"
   instance_type = "m5a.xlarge"
   key_name = "<key_name>"
 
@@ -50,7 +44,7 @@ resource "aws_instance" "aapvm" {
   }
 
   tags = {
-    Name = "aap-infrastructure-${var.dep_id}-vm-${var.vm_name_prefix}${random_string.instance_name_suffix.result}"
+    Name = "aap-infrastructure-${var.deployment_id}-vm-${var.vm_name_prefix}${var.instance_name_suffix}"
     app = var.app_tag
   }
 }
