@@ -38,7 +38,7 @@ resource "random_string" "instance_name_suffix" {
 
 resource "aws_instance" "aapvm" {
   ami           = "<image_id>"
-  instance_type = "<m5a.xlarge>"
+  instance_type = "m5a.xlarge"
   key_name = "<key_name>"
 
   associate_public_ip_address = true
