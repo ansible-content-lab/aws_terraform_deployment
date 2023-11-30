@@ -2,10 +2,7 @@ provider "aws" {
   region = var.aws_region
 }
 
-variable "deployment_id" {
-  type    = string
-  default = "<deployment-id>"
-}
+variable "dep_id" {}
 
 variable "app_tag" {
   description = "Tag value for AAP component"
@@ -53,7 +50,7 @@ resource "aws_instance" "aapvm" {
   }
 
   tags = {
-    Name = "aap-infrastructure-${var.deployment_id}-vm-${var.vm_name_prefix}${random_string.instance_name_suffix.result}"
+    Name = "aap-infrastructure-${var.dep_id}-vm-${var.vm_name_prefix}${random_string.instance_name_suffix.result}"
     app = var.app_tag
   }
 }
