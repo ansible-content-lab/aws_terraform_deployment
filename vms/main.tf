@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 variable "deployment_id" {}
 variable "instance_name_suffix" {}
 variable "vm_name_prefix" {}
@@ -14,12 +10,6 @@ variable "app_tag" {
   }
   type = string
   default = "controller"
-}
-
-variable "aws_region" {
-  description = "Region where the EC2 instance will be launched"
-  type = string
-  default = "us-east-1"
 }
 
 resource "aws_instance" "aapvm" {

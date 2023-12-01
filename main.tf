@@ -17,6 +17,13 @@ terraform {
   }
   required_version = ">= 1.5.4"
 }
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "random_string" "deployment_id" {
+  count = "${var.deployment_id != "" ? 0 : 1}"
 
 resource "random_string" "deployment_id" {
   count = local.create_deployment_id
