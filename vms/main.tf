@@ -4,6 +4,7 @@ provider "aws" {
 
 variable "deployment_id" {}
 variable "instance_name_suffix" {}
+variable "vm_name_prefix" {}
 
 variable "app_tag" {
   description = "Tag value for AAP component"
@@ -19,12 +20,6 @@ variable "aws_region" {
   description = "Region where the EC2 instance will be launched"
   type = string
   default = "us-east-1"
-}
-
-variable "vm_name_prefix" {
-  description = "Name of ec2 instance"
-  type = string
-  default = "<vm_name>"
 }
 
 resource "aws_instance" "aapvm" {

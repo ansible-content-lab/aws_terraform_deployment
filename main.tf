@@ -22,6 +22,8 @@ resource "random_string" "deployment_id" {
   count = local.create_deployment_id
   length = 8
   special = false
+  length = 8
+  special  = false
   upper = false
   numeric = false
 }
@@ -41,11 +43,12 @@ resource "random_string" "instance_name_suffix" {
   numeric = false
 }
 
-module "vm" {
+module "controller_vm" {
   source = "./vms"
 
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
+  vm_name_prefix = "controller-"
 }
 
 module "database" {
