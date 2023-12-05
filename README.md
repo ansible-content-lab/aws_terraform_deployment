@@ -45,3 +45,9 @@ terraform apply
 ```
 
 Confirm to create infrastructure.
+
+To destroy infrastructure
+
+```bash
+terraform destroy
+```
