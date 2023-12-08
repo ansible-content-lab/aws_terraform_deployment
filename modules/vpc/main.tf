@@ -9,7 +9,6 @@ data "aws_availability_zones" "available_azs" {
     values = ["opt-in-not-required"]
   }
 }
-
 #
 # VPC
 #
@@ -17,25 +16,23 @@ resource "aws_vpc" "aap_infrastructure_vpc" {
     cidr_block = var.infrastructure_vpc_cidr
     enable_dns_support   = true
     enable_dns_hostnames = true
-    tags = merge( 
+    tags = merge(
       {
         Name = "aap-infrastructure-${var.deployment_id}-vpc"
       },
       var.persistent_tags
     )
 }
-
 #
 # Subnets
 #
 resource "aws_subnet" "aap_infrastructure_subnets" {
   count = length(var.infrastructure_vpc_subnets)
-  vpc_id                  = aws_vpc.aap_infrastructure_vpc.id
-  cidr_block              = var.infrastructure_vpc_subnets[count.index]["cidr_block"]
-  availability_zone       = var.infrastructure_vpc_subnets[count.index]["availability_zone"]  # Change this to your desired availability zone
-  #map_public_ip_on_launch = true
+  vpc_id = aws_vpc.aap_infrastructure_vpc.id
+  cidr_block = var.infrastructure_vpc_subnets[count.index]["cidr_block"]
+  availability_zone = var.infrastructure_vpc_subnets[count.index]["availability_zone"]
 
-  tags = merge( 
+  tags = merge(
       {
         Name = "aap-infrastructure-${var.deployment_id}-subnet-${var.infrastructure_vpc_subnets[count.index]["name"]}"
       },
@@ -44,14 +41,13 @@ resource "aws_subnet" "aap_infrastructure_subnets" {
 
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
-
 #
 # Internet gateway
 #
 resource "aws_internet_gateway" "aap_infrastructure_igw" {
   vpc_id = aws_vpc.aap_infrastructure_vpc.id
   
-  tags = merge( 
+  tags = merge(
       {
         Name = "aap-infrastructure-${var.deployment_id}-igw"
       },
@@ -59,7 +55,6 @@ resource "aws_internet_gateway" "aap_infrastructure_igw" {
     )
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
-
 #
 # Security group
 #
@@ -159,7 +154,7 @@ resource "aws_security_group" "aap_infrastructure_sg" {
     description = "allow all outbound"
   }
 
-  tags = merge( 
+  tags = merge(
       {
         Name = "aap-infrastructure-${var.deployment_id}-sg"
       },
@@ -173,13 +168,11 @@ resource "aws_security_group" "aap_infrastructure_sg" {
 #
 resource "aws_route_table" "aap_infrastructure_route_table" {
   vpc_id = aws_vpc.aap_infrastructure_vpc.id
-
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.aap_infrastructure_igw.id  
+    gateway_id = aws_internet_gateway.aap_infrastructure_igw.id
   }
-
-  tags = merge( 
+  tags = merge(
       {
         Name = "aap-infrastructure-${var.deployment_id}-rt"
       },
@@ -192,8 +185,8 @@ resource "aws_route_table" "aap_infrastructure_route_table" {
 # Route table association
 #
 resource "aws_route_table_association" "aap_infrastructure_subnet_association" {
-  for_each = { for k, subnet in aws_subnet.aap_infrastructure_subnets : k => subnet.id }
-  subnet_id      = each.value
+  for_each = { for key, subnet in aws_subnet.aap_infrastructure_subnets : key => subnet.id }
+  subnet_id = each.value
   route_table_id = aws_route_table.aap_infrastructure_route_table.id
   depends_on = [aws_subnet.aap_infrastructure_subnets]
 }

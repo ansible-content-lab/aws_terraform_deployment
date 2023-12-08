@@ -7,10 +7,3 @@ variable "deployment_id" {
   }
 }
 
-variable "infrastructure_vpc_cidr" {
-  description = <<-EOT
-    IPv4 CIDR netmask for the VPC resource.
-  EOT
-  type        = string
-  default     = "172.16.0.0/22"
-}

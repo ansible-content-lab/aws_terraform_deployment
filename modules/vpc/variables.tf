@@ -1,7 +1,5 @@
 variable "infrastructure_vpc_cidr" {
-  description = <<-EOT
-    IPv4 CIDR netmask for the VPC resource.
-  EOT
+  description = "IPv4 CIDR netmask for the VPC resource."
   type        = string
   default     = "172.16.0.0/22"
 }
@@ -15,7 +13,10 @@ variable "deployment_id" {
   }
 }
 
-variable persistent_tags {}
+variable persistent_tags {
+  description = "Persistent tags"
+  type        = map(string)
+}
 
 variable "infrastructure_vpc_subnets" {
   type = list(object({
@@ -45,21 +46,3 @@ variable "infrastructure_vpc_subnets" {
   }]
 }
 
-variable "infrastructure_vpc_subnets_controller" {
-  type        = string
-  default     = "172.16.0.0/22"
-}
-variable "infrastructure_vpc_subnets_execution" {
-  type        = string
-  default     = "172.16.1.0/24"
-}
-
-variable "infrastructure_vpc_subnets_hub" {
-  type        = string
-  default     = "172.16.2.0/24"
-}
-
-variable "infrastructure_vpc_subnets_eda" {
-  type        = string
-  default     = "172.16.3.0/24"
-}
