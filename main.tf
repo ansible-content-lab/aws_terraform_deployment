@@ -28,18 +28,6 @@ resource "random_string" "deployment_id" {
   upper = false
   numeric = false
 }
-
-#
-# AWS availability zones
-#
-data "aws_availability_zones" "available_azs" {
-  state = "available"
-  filter {
-    name = "opt-in-status"
-    # Currently, no support for Local Zones, Wavelength, or Outpost
-    values = ["opt-in-not-required"]
-  }
-}
 #
 # VPC
 #

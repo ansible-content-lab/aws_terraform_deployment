@@ -1,14 +1,3 @@
-
-
-#Figure out which availability zones are in the region.
-data "aws_availability_zones" "available_azs" {
-  state = "available"
-  filter {
-    name = "opt-in-status"
-    # Currently, no support for Local Zones, Wavelength, or Outpost
-    values = ["opt-in-not-required"]
-  }
-}
 #
 # VPC
 #
