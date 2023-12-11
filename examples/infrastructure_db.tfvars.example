@@ -1,0 +1,18 @@
+// Example file: rename to infrastructure_db.tfvars and edit as needed
+
+// Common infrastucture
+infrastructure_region = "us-east-1"
+
+// Database
+infrastructure_db_username = ansible
+infrastructure_db_password = changeme
+
+infrastructure_db_engine_version = "13.12"
+infrastructure_db_allow_major_version_upgrade = false
+infrastructure_db_auto_minor_version_upgrade = true
+infrastructure_db_multi_az = false
+infrastructure_db_storage_encrypted = true
+infrastructure_db_db_instance_class = db.m5d.xlarge
+infrastructure_db_storage_type = io1
+infrastructure_db_storage_iops = 5000
+infrastructure_db_allocated_storage = 100

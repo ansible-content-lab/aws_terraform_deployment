@@ -7,3 +7,8 @@ output "vpc_module_outputs" {
   description = "VPC outputs"
   value = module.vpc
 }
+
+output "database_module_outputs" {
+  description = "Database outputs"
+  value = module.database
+}
