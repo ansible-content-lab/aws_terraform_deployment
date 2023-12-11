@@ -7,6 +7,7 @@ terraform {
     }
   }
 }
+
 #
 # VPC
 #
@@ -21,6 +22,7 @@ resource "aws_vpc" "aap_infrastructure_vpc" {
       var.persistent_tags
     )
 }
+
 #
 # Subnets
 #
@@ -51,6 +53,7 @@ resource "aws_internet_gateway" "aap_infrastructure_igw" {
     )
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
+
 #
 # Security group
 #

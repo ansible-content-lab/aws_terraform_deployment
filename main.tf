@@ -29,6 +29,7 @@ resource "random_string" "deployment_id" {
   upper = false
   numeric = false
 }
+
 #
 # VPC
 #
