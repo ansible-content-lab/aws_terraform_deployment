@@ -6,4 +6,3 @@ variable "deployment_id" {
     error_message = "deployment_id length should be 8 chars and should contain lower case alphabets only"
   }
 }
-

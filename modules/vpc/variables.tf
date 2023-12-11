@@ -45,4 +45,3 @@ variable "infrastructure_vpc_subnets" {
     availability_zone = "us-east-1d"
   }]
 }
-
