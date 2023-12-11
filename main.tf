@@ -19,7 +19,7 @@ terraform {
       version = "~> 3.6.0"
     }
   }
-  required_version = ">= 1.4.0"
+  required_version = ">= 1.5.4"
 }
 
 resource "random_string" "deployment_id" {

@@ -1,3 +1,12 @@
+terraform {
+  required_version = ">= 1.5.4"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
+}
 #
 # VPC
 #
@@ -27,7 +36,6 @@ resource "aws_subnet" "aap_infrastructure_subnets" {
       },
       var.persistent_tags
     )
-
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
 #
@@ -35,7 +43,6 @@ resource "aws_subnet" "aap_infrastructure_subnets" {
 #
 resource "aws_internet_gateway" "aap_infrastructure_igw" {
   vpc_id = aws_vpc.aap_infrastructure_vpc.id
-  
   tags = merge(
       {
         Name = "aap-infrastructure-${var.deployment_id}-igw"
