@@ -1,6 +1,7 @@
 variable "deployment_id" {}
 variable "instance_name_suffix" {}
 variable "vm_name_prefix" {}
+variable "latest_al2_linux_ami" {}
 
 variable "app_tag" {
   description = "Tag value for AAP component"
@@ -13,7 +14,7 @@ variable "app_tag" {
 }
 
 resource "aws_instance" "aapvm" {
-  ami = "<image_id>"
+  ami = var.latest_al2_linux_ami
   instance_type = "m5a.xlarge"
   key_name = "<key_name>"
 

@@ -50,12 +50,23 @@ resource "random_string" "instance_name_suffix" {
   numeric = false
 }
 
+data "aws_ami" "latest_al2_linux_ami" {
+  most_recent = true
+  owners = ["amazon"]
+
+  filter {
+    name = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
+  }
+}
+
 module "controller_vm" {
   source = "./vms"
 
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "controller-"
+  latest_al2_linux_ami = data.aws_ami.latest_al2_linux_ami.id
 }
 
 module "database" {
