@@ -58,7 +58,7 @@ data "aws_ami" "latest_al2_linux_ami" {
 }
 
 module "controller_vm" {
-  source = "./vms"
+  source = "./modules/vms"
 
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
