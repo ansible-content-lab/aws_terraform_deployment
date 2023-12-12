@@ -1,7 +1,7 @@
 variable "deployment_id" {}
 variable "instance_name_suffix" {}
 variable "vm_name_prefix" {}
-variable "latest_al2_linux_ami" {}
+variable "latest_rhel9_ami" {}
 
 variable "app_tag" {
   description = "Tag value for AAP component"

@@ -47,13 +47,13 @@ resource "random_string" "instance_name_suffix" {
   numeric = false
 }
 
-data "aws_ami" "latest_al2_linux_ami" {
+data "aws_ami" "latest_rhel9_ami" {
   most_recent = true
-  owners = ["amazon"]
+  owners = ["309956199498"] # Red Hat's account ID
 
   filter {
     name = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
+    values = ["RHEL-9.0*"]
   }
 }
 
@@ -63,8 +63,8 @@ module "controller_vm" {
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "controller-"
-  # desired ami id can be specified by replacing below line with `latest_al2_linux_ami = <desired-ami-id-here>`
-  latest_al2_linux_ami = data.aws_ami.latest_al2_linux_ami.id
+  # desired ami id can be specified by replacing below line with `latest_rhel9_ami = <desired-ami-id-here>`
+  latest_rhel9_ami = data.aws_ami.latest_rhel9_ami.id
 }
 
 module "database" {

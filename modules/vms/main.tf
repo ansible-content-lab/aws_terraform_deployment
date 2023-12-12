@@ -1,5 +1,5 @@
 resource "aws_instance" "aapvm" {
-  ami = var.latest_al2_linux_ami
+  ami = var.latest_rhel9_ami
   instance_type = "m5a.xlarge"
   key_name = "<key_name>"
 
