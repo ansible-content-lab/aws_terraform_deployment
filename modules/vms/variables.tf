@@ -12,3 +12,9 @@ variable "app_tag" {
   type = string
   default = "controller"
 }
+
+variable "instance_type" {
+  description = "VM instance type"
+  type = string
+  default = "m5a.xlarge"
+}

@@ -1,6 +1,6 @@
 resource "aws_instance" "aapvm" {
   ami = var.latest_rhel9_ami
-  instance_type = "m5a.xlarge"
+  instance_type = var.instance_type
   key_name = "<key_name>"
 
   associate_public_ip_address = true
