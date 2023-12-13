@@ -12,3 +12,8 @@ output "database_module_outputs" {
   description = "Database outputs"
   value = module.database
 }
+
+output "controller_vm_module_outputs" {
+  description = "VMs outputs"
+  value = module.controller_vm
+}

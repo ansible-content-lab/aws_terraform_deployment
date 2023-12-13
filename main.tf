@@ -17,6 +17,10 @@ terraform {
   }
   required_version = ">= 1.5.4"
 }
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
 
 resource "random_string" "deployment_id" {
   count = local.create_deployment_id
@@ -34,6 +38,35 @@ module "vpc" {
   source = "./modules/vpc"
   deployment_id = var.deployment_id == "" ? random_string.deployment_id[0].id : var.deployment_id
   persistent_tags = local.persistent_tags
+}
+
+resource "random_string" "instance_name_suffix" {
+  length = 8
+  special  = false
+  upper = false
+  numeric = false
+}
+
+data "aws_ami" "instance_ami" {
+  most_recent = true
+  owners = ["309956199498"] # Red Hat's account ID
+
+  filter {
+    name = "name"
+    values = ["RHEL-9.0*"]
+  }
+}
+
+module "controller_vm" {
+  source = "./modules/vms"
+
+  deployment_id = var.deployment_id
+  instance_name_suffix = random_string.instance_name_suffix.result
+  vm_name_prefix = "controller-"
+  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
+  instance_ami = data.aws_ami.instance_ami.id
+  vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
+  subnet_id = module.vpc.infrastructure_subnets[0]
 }
 
 module "database" {
