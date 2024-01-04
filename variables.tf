@@ -84,3 +84,16 @@ variable "infrastructure_db_password" {
   sensitive = true
   default = "changeme"
 }
+
+variable "number_of_controller_instances" {
+  description = "The number of ec2 instances for controller"
+  type = number
+  default = 2
+}
+variable "number_of_hub_instances" {
+  description = "The number of ec2 instances for hub"
+  type = number
+  default = 2
+}
+
+
