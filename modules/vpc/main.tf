@@ -31,11 +31,17 @@ resource "aws_vpc" "aap_infrastructure_vpc" {
 data "aws_availability_zones" "availability_zone_list" {
   state = "available"
 }
+
+resource "random_shuffle" "az" {
+  input        = data.aws_availability_zones.availability_zone_list.names
+  result_count = length(var.infrastructure_vpc_subnets)
+}
+
 resource "aws_subnet" "aap_infrastructure_subnets" {
   count = length(var.infrastructure_vpc_subnets)
   vpc_id = aws_vpc.aap_infrastructure_vpc.id
   cidr_block = var.infrastructure_vpc_subnets[count.index]["cidr_block"]
-  availability_zone = data.aws_availability_zones.availability_zone_list.names[0]
+  availability_zone = random_shuffle.az.result[count.index]
 
   tags = merge(
     {
