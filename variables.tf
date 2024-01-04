@@ -85,6 +85,20 @@ variable "infrastructure_db_password" {
   default = "changeme"
 }
 
+# EDA variables
+variable "infrastructure_eda_count" {
+  description = "The number of EDA instances"
+  type = number
+  default = 1
+}
+
+# Execution variables
+variable "infrastructure_execution_count" {
+  description = "The number of execution instances"
+  type = number
+  default = 1
+}
+
 variable "number_of_controller_instances" {
   description = "The number of ec2 instances for controller"
   type = number
@@ -95,5 +109,4 @@ variable "number_of_hub_instances" {
   type = number
   default = 2
 }
-
 

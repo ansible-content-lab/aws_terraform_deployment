@@ -83,6 +83,36 @@ module "hub_vm" {
   subnet_id = module.vpc.infrastructure_subnets[0]
 }
 
+module "execution_vm" {
+  source = "./modules/vms"
+
+  count = var.infrastructure_execution_count
+
+  deployment_id = var.deployment_id
+  instance_name_suffix = random_string.instance_name_suffix.result
+  vm_name_prefix = "execution-${count.index + 1}-"
+  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
+  instance_ami = data.aws_ami.instance_ami.id
+  vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
+  # subnet_id = index(module.vpc.infrastructure_subnets, "execution")
+  subnet_id = module.vpc.infrastructure_subnets[1]
+}
+
+module "eda_vm" {
+  source = "./modules/vms"
+
+  count = var.infrastructure_eda_count
+
+  deployment_id = var.deployment_id
+  instance_name_suffix = random_string.instance_name_suffix.result
+  vm_name_prefix = "eda-${count.index + 1}-"
+  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
+  instance_ami = data.aws_ami.instance_ami.id
+  vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
+  # subnet_id = index(module.vpc.infrastructure_subnets, "eda")
+  subnet_id = module.vpc.infrastructure_subnets[3]
+}
+
 module "database" {
   source = "./modules/database"
 
