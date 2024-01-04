@@ -19,7 +19,7 @@ terraform {
 }
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 resource "random_string" "deployment_id" {

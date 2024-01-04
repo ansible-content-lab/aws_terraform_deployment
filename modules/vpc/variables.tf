@@ -22,26 +22,21 @@ variable "infrastructure_vpc_subnets" {
   type = list(object({
     name = string
     cidr_block = string
-    availability_zone = string
   }))
   default = [{
     name = "controller"
     cidr_block = "172.16.0.0/24"
-    availability_zone = "us-east-1a"
   },
    {
     name = "execution"
     cidr_block = "172.16.1.0/24"
-    availability_zone = "us-east-1b"
   },
    {
     name = "hub"
     cidr_block = "172.16.2.0/24"
-    availability_zone = "us-east-1c"
   },
   {
     name = "eda"
     cidr_block = "172.16.3.0/24"
-    availability_zone = "us-east-1d"
   }]
 }
