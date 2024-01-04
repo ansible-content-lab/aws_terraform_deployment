@@ -84,3 +84,17 @@ variable "infrastructure_db_password" {
   sensitive = true
   default = "changeme"
 }
+
+# EDA variables
+variable "infrastructure_eda_count" {
+  description = "The number of EDA instances"
+  type = number
+  default = 1
+}
+
+# Execution variables
+variable "infrastructure_execution_count" {
+  description = "The number of execution instances"
+  type = number
+  default = 1
+}
