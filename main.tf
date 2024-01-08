@@ -60,7 +60,7 @@ data "aws_ami" "instance_ami" {
 module "controller_vm" {
   source = "./modules/vms"
 
-  count = var.controller_instances_count
+  count = var.infrastructure_controller_count
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "controller-${count.index + 1}-"
@@ -73,7 +73,7 @@ module "controller_vm" {
 module "hub_vm" {
   source = "./modules/vms"
 
-  count = var.hub_instances_count
+  count = var.infrastructure_hub_count
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "hub-${count.index + 1}-"
