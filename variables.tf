@@ -98,3 +98,15 @@ variable "infrastructure_execution_count" {
   type = number
   default = 1
 }
+
+variable "infrastructure_controller_count" {
+  description = "The number of ec2 instances for controller"
+  type = number
+  default = 1
+}
+variable "infrastructure_hub_count" {
+  description = "The number of ec2 instances for hub"
+  type = number
+  default = 1
+}
+

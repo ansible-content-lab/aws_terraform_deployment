@@ -60,13 +60,27 @@ data "aws_ami" "instance_ami" {
 module "controller_vm" {
   source = "./modules/vms"
 
+  count = var.infrastructure_controller_count
   deployment_id = var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
-  vm_name_prefix = "controller-"
+  vm_name_prefix = "controller-${count.index + 1}-"
   # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
   instance_ami = data.aws_ami.instance_ami.id
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   subnet_id = module.vpc.infrastructure_subnets[0]
+}
+
+module "hub_vm" {
+  source = "./modules/vms"
+
+  count = var.infrastructure_hub_count
+  deployment_id = var.deployment_id
+  instance_name_suffix = random_string.instance_name_suffix.result
+  vm_name_prefix = "hub-${count.index + 1}-"
+  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
+  instance_ami = data.aws_ami.instance_ami.id
+  vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
+  subnet_id = module.vpc.infrastructure_subnets[2]
 }
 
 module "execution_vm" {
