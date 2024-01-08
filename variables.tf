@@ -85,11 +85,30 @@ variable "infrastructure_db_password" {
   default = "changeme"
 }
 
+# Controller variables
+variable "infrastructure_controller_count" {
+  description = "The number of ec2 instances for controller"
+  type = number
+  default = 1
+}
+
+variable "infrastructure_controller_type" {
+  description = "The controller instance type"
+  type = string
+  default = "m5a.xlarge"
+}
+
 # EDA variables
 variable "infrastructure_eda_count" {
   description = "The number of EDA instances"
   type = number
   default = 1
+}
+
+variable "infrastructure_eda_type" {
+  description = "The eda instance type"
+  type = string
+  default = "m5a.xlarge"
 }
 
 # Execution variables
@@ -99,14 +118,21 @@ variable "infrastructure_execution_count" {
   default = 1
 }
 
-variable "infrastructure_controller_count" {
-  description = "The number of ec2 instances for controller"
-  type = number
-  default = 1
+variable "infrastructure_execution_type" {
+  description = "The execution instance type"
+  type = string
+  default = "m5a.xlarge"
 }
+
+# Hub variables
 variable "infrastructure_hub_count" {
   description = "The number of ec2 instances for hub"
   type = number
   default = 1
 }
 
+variable "infrastructure_hub_type" {
+  description = "The hub instance type"
+  type = string
+  default = "m5a.large"
+}

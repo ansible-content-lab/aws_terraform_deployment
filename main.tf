@@ -66,6 +66,7 @@ module "controller_vm" {
   vm_name_prefix = "controller-${count.index + 1}-"
   # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
   instance_ami = data.aws_ami.instance_ami.id
+  instance_type = var.infrastructure_controller_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   subnet_id = module.vpc.infrastructure_subnets[0]
 }
@@ -79,6 +80,7 @@ module "hub_vm" {
   vm_name_prefix = "hub-${count.index + 1}-"
   # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
   instance_ami = data.aws_ami.instance_ami.id
+  instance_type = var.infrastructure_hub_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   subnet_id = module.vpc.infrastructure_subnets[2]
 }
@@ -93,6 +95,7 @@ module "execution_vm" {
   vm_name_prefix = "execution-${count.index + 1}-"
   # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
   instance_ami = data.aws_ami.instance_ami.id
+  instance_type = var.infrastructure_execution_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   # subnet_id = index(module.vpc.infrastructure_subnets, "execution")
   subnet_id = module.vpc.infrastructure_subnets[1]
@@ -108,6 +111,7 @@ module "eda_vm" {
   vm_name_prefix = "eda-${count.index + 1}-"
   # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
   instance_ami = data.aws_ami.instance_ami.id
+  instance_type = var.infrastructure_eda_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   # subnet_id = index(module.vpc.infrastructure_subnets, "eda")
   subnet_id = module.vpc.infrastructure_subnets[3]
