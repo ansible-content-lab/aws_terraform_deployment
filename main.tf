@@ -69,6 +69,7 @@ module "controller_vm" {
   instance_type = var.infrastructure_controller_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   subnet_id = module.vpc.infrastructure_subnets[0]
+  key_pair_name = aws_key_pair.admin.key_name
 }
 
 module "hub_vm" {
@@ -157,3 +158,24 @@ module "database" {
 
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
 }
+
+resource "terraform_data" "private_key_copy" {
+  
+for_each = { for host, instance in flatten(module.controller_vm[*].vm_public_ip): host => instance }
+  provisioner "file" {
+    connection {
+      type = "ssh"
+      user = "ec2-user"
+      host = each.value
+      private_key = file(var.infrastructure_private_key_filepath)
+    }
+      source      = "${var.infrastructure_private_key_filepath}"
+      destination = "/home/ec2-user/.ssh/infrastructure_private_key.pem"
+  }
+}
+
+resource "aws_key_pair" "admin" {
+  key_name   = "admin-key"
+  public_key =file(var.infrastructure_public_key_filepath)
+}
+
