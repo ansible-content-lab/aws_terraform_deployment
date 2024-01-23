@@ -165,7 +165,7 @@ for_each = { for host, instance in flatten(module.controller_vm[*].vm_public_ip)
   provisioner "file" {
     connection {
       type = "ssh"
-      user = "ec2-user"
+      user = var.infrastructure_admin_username
       host = each.value
       private_key = file(var.infrastructure_private_key_filepath)
     }
@@ -178,4 +178,33 @@ resource "aws_key_pair" "admin" {
   key_name   = "admin-key"
   public_key =file(var.infrastructure_public_key_filepath)
 }
+resource "terraform_data" "copy_inventory" {
+for_each = { for host, instance in flatten(module.controller_vm[*].vm_public_ip): host => instance }
 
+  provisioner "file" {
+    connection {
+      type = "ssh"
+      user = var.infrastructure_admin_username
+      host = each.value
+      private_key = file(var.infrastructure_private_key_filepath)
+    }
+     content = templatefile("${path.module}/templates/inventory.j2", { 
+        aap_controller_hosts = module.controller_vm[*].vm_private_ip
+        aap_ee_hosts = module.execution_vm[*].vm_private_ip
+        aap_hub_hosts = module.hub_vm[*].vm_private_ip
+        aap_eda_hosts = module.eda_vm[*].vm_private_ip
+        aap_eda_allowed_hostnames = module.eda_vm[*].vm_public_ip
+        infrastructure_db_username = var.infrastructure_db_username
+        infrastructure_db_password = var.infrastructure_db_password
+        aap_red_hat_username = var.aap_red_hat_username
+        aap_red_hat_password= var.aap_red_hat_password
+        aap_db_host = module.database.infrastructure_controller_rds_hostname
+        aap_admin_password = var.aap_admin_password
+        infrastructure_admin_username = var.infrastructure_admin_username
+      })
+      destination = var.infrastructure_aap_installer_inventory_path
+  }
+    
+
+  
+}

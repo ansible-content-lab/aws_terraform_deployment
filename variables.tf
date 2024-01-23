@@ -72,6 +72,13 @@ variable "infrastructure_db_storage_type" {
   default = "io1"
 }
 
+variable "infrastructure_admin_username" {
+  type = string
+  default = "ec2-user"
+  description = "The admin username of the VM that will be deployed."
+  nullable = false
+}
+
 variable "infrastructure_db_username" {
   description = "Database instance username"
   type = string
@@ -147,6 +154,27 @@ variable "infrastructure_public_key_filepath" {
   type = string
   default = "~/.ssh/id_rsa.pub"
 }
+variable "aap_red_hat_username" {
+  description = "Red Hat account name that will be used for Subscription Management."
+  type = string
+}
 
+variable "aap_red_hat_password" {
+  description = "Red Hat account password."
+  type = string
+  sensitive = true
+}
+
+variable "aap_admin_password" {
+  description = "The admin password to create for Ansible Automation Platform application."
+  type = string
+  sensitive = true
+}
+
+variable "infrastructure_aap_installer_inventory_path" {
+  description = "Inventory path on the installer host"
+  default = "/home/ec2-user/inventory_aws.txt"
+  type = string
+}
 
 
