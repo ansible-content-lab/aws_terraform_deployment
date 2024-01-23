@@ -173,8 +173,6 @@ variable "aap_admin_password" {
 
 variable "infrastructure_aap_installer_inventory_path" {
   description = "Inventory path on the installer host"
-  default = "/home/ec2-user/inventory_aws.txt"
+  default = "/home/ec2-user/inventory_aws"
   type = string
 }
-
-

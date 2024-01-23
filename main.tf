@@ -204,7 +204,4 @@ for_each = { for host, instance in flatten(module.controller_vm[*].vm_public_ip)
       })
       destination = var.infrastructure_aap_installer_inventory_path
   }
-    
-
-  
 }
