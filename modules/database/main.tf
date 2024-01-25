@@ -10,12 +10,13 @@ terraform {
 
 resource "aws_db_subnet_group" "aap_infrastructure_db_subnet_group" {
   description = var.db_sng_description
-  name        = var.db_sng_name
-  subnet_ids  = var.db_sng_subnets
-
+  name = var.db_sng_name
+  subnet_ids = var.db_sng_subnets
   tags = var.db_sng_tags
 }
 resource "aws_db_instance" "controller" {
+  depends_on = [ aws_db_subnet_group.aap_infrastructure_db_subnet_group ]
+
   allocated_storage = var.allocated_storage
   allow_major_version_upgrade = var.allow_major_version_upgrade
   auto_minor_version_upgrade = var.auto_minor_version_upgrade
@@ -30,12 +31,13 @@ resource "aws_db_instance" "controller" {
   skip_final_snapshot = var.skip_final_snapshot
   storage_encrypted = var.storage_encrypted
   storage_type = var.storage_type
-  tags = var.tags
-
   username = var.username
   password = var.password
-
   vpc_security_group_ids = var.vpc_security_group_ids
-
-  depends_on = [aws_db_subnet_group.aap_infrastructure_db_subnet_group]
+  tags = merge(
+    {
+      Name = "aap-infrastructure-${var.deployment_id}-db"
+    },
+    var.persistent_tags
+  )
 }

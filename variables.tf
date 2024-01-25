@@ -2,8 +2,8 @@ variable "deployment_id" {
   description = "Creates a random string that will be used in tagging for correlating the resources used with a deployment of AAP."
   type = string
   validation {
-    condition = (length(var.deployment_id) == 8 || length(var.deployment_id) == 0) && (can(regex("^[a-z]", var.deployment_id)) || var.deployment_id == "")
-    error_message = "deployment_id length should be 8 chars and should contain lower case alphabets only"
+    condition = ((length(var.deployment_id) >= 2 && length(var.deployment_id)<=10) || length(var.deployment_id) == 0) && (can(regex("^[a-z]", var.deployment_id)) || var.deployment_id == "")
+    error_message = "deployment_id length should be between 2-10 chars and should contain lower case alpha chars only"
   }
 }
 
@@ -73,9 +73,9 @@ variable "infrastructure_db_storage_type" {
 }
 
 variable "infrastructure_admin_username" {
+  description = "The admin username of the VM that will be deployed."
   type = string
   default = "ec2-user"
-  description = "The admin username of the VM that will be deployed."
   nullable = false
 }
 
@@ -109,7 +109,7 @@ variable "infrastructure_controller_type" {
 variable "infrastructure_eda_count" {
   description = "The number of EDA instances"
   type = number
-  default = 1
+  default = 0
 }
 
 variable "infrastructure_eda_type" {
@@ -122,7 +122,7 @@ variable "infrastructure_eda_type" {
 variable "infrastructure_execution_count" {
   description = "The number of execution instances"
   type = number
-  default = 1
+  default = 0
 }
 
 variable "infrastructure_execution_type" {
@@ -135,7 +135,7 @@ variable "infrastructure_execution_type" {
 variable "infrastructure_hub_count" {
   description = "The number of ec2 instances for hub"
   type = number
-  default = 1
+  default = 0
 }
 
 variable "infrastructure_hub_type" {
@@ -144,12 +144,12 @@ variable "infrastructure_hub_type" {
   default = "m5a.large"
 }
 
-variable "infrastructure_private_key_filepath" {
+variable "infrastructure_ssh_private_key" {
   description = "Private ssh key file path."
   type = string
   default = "~/.ssh/id_rsa"
 }
-variable "infrastructure_public_key_filepath" {
+variable "infrastructure_ssh_public_key" {
   description = "Public ssh key file path."
   type = string
   default = "~/.ssh/id_rsa.pub"

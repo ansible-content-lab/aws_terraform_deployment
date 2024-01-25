@@ -13,10 +13,10 @@ output "vpc_module_outputs" {
   value = module.vpc
 }
 
-output "database_module_outputs" {
-  description = "Database outputs"
-  value = module.database
-}
+# output "database_module_outputs" {
+#   description = "Database outputs"
+#   value = module.database
+# }
 
 output "controller_vm_module_outputs" {
   description = "VMs outputs"
