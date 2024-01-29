@@ -42,7 +42,7 @@ module "vpc" {
 
 resource "random_string" "instance_name_suffix" {
   length = 8
-  special  = false
+  special = false
   upper = false
   numeric = false
 }
@@ -53,7 +53,7 @@ data "aws_ami" "instance_ami" {
 
   filter {
     name = "name"
-    values = ["RHEL-9.0*"]
+    values = ["RHEL-9.2.*_HVM-*"]
   }
 }
 
@@ -112,9 +112,8 @@ module "controller_vm" {
   deployment_id = var.deployment_id == "" ? random_string.deployment_id[0].id : var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "controller-${count.index + 1}-"
-  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
-  instance_ami = data.aws_ami.instance_ami.id
-  instance_type = var.infrastructure_controller_type
+  instance_ami = var.infrastructure_hub_ami == "" ? data.aws_ami.instance_ami.id : var.infrastructure_controller_ami
+  instance_type = var.infrastructure_controller_instance_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   subnet_id = module.vpc.infrastructure_subnets[0]
   key_pair_name = aws_key_pair.admin.key_name
@@ -134,11 +133,11 @@ module "hub_vm" {
   deployment_id = var.deployment_id == "" ? random_string.deployment_id[0].id : var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "hub-${count.index + 1}-"
-  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
-  instance_ami = data.aws_ami.instance_ami.id
-  instance_type = var.infrastructure_hub_type
+  instance_ami = var.infrastructure_hub_ami == "" ? data.aws_ami.instance_ami.id : var.infrastructure_hub_ami
+  instance_type = var.infrastructure_hub_instance_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   subnet_id = module.vpc.infrastructure_subnets[2]
+  key_pair_name = aws_key_pair.admin.key_name
   persistent_tags = local.persistent_tags
   infrastructure_ssh_private_key = var.infrastructure_ssh_private_key
   infrastructure_admin_username = var.infrastructure_admin_username
@@ -155,12 +154,12 @@ module "execution_vm" {
   deployment_id = var.deployment_id == "" ? random_string.deployment_id[0].id : var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "execution-${count.index + 1}-"
-  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
-  instance_ami = data.aws_ami.instance_ami.id
-  instance_type = var.infrastructure_execution_type
+  instance_ami = var.infrastructure_hub_ami == "" ? data.aws_ami.instance_ami.id : var.infrastructure_execution_ami
+  instance_type = var.infrastructure_execution_instance_type
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   # subnet_id = index(module.vpc.infrastructure_subnets, "execution")
   subnet_id = module.vpc.infrastructure_subnets[1]
+  key_pair_name = aws_key_pair.admin.key_name
   persistent_tags = local.persistent_tags
   infrastructure_ssh_private_key = var.infrastructure_ssh_private_key
   infrastructure_admin_username = var.infrastructure_admin_username
@@ -177,12 +176,12 @@ module "eda_vm" {
   deployment_id = var.deployment_id == "" ? random_string.deployment_id[0].id : var.deployment_id
   instance_name_suffix = random_string.instance_name_suffix.result
   vm_name_prefix = "eda-${count.index + 1}-"
-  # desired ami id can be specified by replacing below line with `instance_ami = <desired-ami-id-here>`
-  instance_ami = data.aws_ami.instance_ami.id
-  instance_type = var.infrastructure_eda_type
+  instance_ami = var.infrastructure_hub_ami == "" ? data.aws_ami.instance_ami.id : var.infrastructure_eda_ami
+  instance_type = var.infrastructure_eda_instance_type
   vpc_security_group_ids = [ module.vpc.infrastructure_sg_id ]
   # subnet_id = index(module.vpc.infrastructure_subnets, "eda")
   subnet_id = module.vpc.infrastructure_subnets[3]
+  key_pair_name = aws_key_pair.admin.key_name
   persistent_tags = local.persistent_tags
   infrastructure_ssh_private_key = var.infrastructure_ssh_private_key
   infrastructure_admin_username = var.infrastructure_admin_username
@@ -217,11 +216,11 @@ resource "terraform_data" "inventory" {
   }
   provisioner "file" {
     content = templatefile("${path.module}/templates/config.j2", { 
-        aap_controller_hosts = module.controller_vm[*].vm_private_ip
-        aap_ee_hosts = module.execution_vm[*].vm_private_ip
-        aap_hub_hosts = module.hub_vm[*].vm_private_ip
-        aap_eda_hosts = module.eda_vm[*].vm_private_ip
-        infrastructure_admin_username = var.infrastructure_admin_username
+      aap_controller_hosts = module.controller_vm[*].vm_private_ip
+      aap_ee_hosts = module.execution_vm[*].vm_private_ip
+      aap_hub_hosts = module.hub_vm[*].vm_private_ip
+      aap_eda_hosts = module.eda_vm[*].vm_private_ip
+      infrastructure_admin_username = var.infrastructure_admin_username
     })
     destination = "/home/${var.infrastructure_admin_username}/.ssh/config"
   }
@@ -229,7 +228,6 @@ resource "terraform_data" "inventory" {
       inline = [
         "chmod 0644 /home/${var.infrastructure_admin_username}/.ssh/config",
         "sudo cp /home/${var.infrastructure_admin_username}/.ssh/config /root/.ssh/config",
-        "sudo cp ${var.infrastructure_aap_installer_inventory_path} /opt/ansible-automation-platform/installer/inventory_aws"
       ]
   }
 }

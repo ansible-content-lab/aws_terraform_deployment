@@ -33,7 +33,7 @@ data "aws_availability_zones" "availability_zone_list" {
 }
 
 resource "random_shuffle" "az" {
-  input        = data.aws_availability_zones.availability_zone_list.names
+  input = data.aws_availability_zones.availability_zone_list.names
   result_count = length(var.infrastructure_vpc_subnets)
 }
 

@@ -10,7 +10,7 @@ variable "deployment_id" {
 variable "aws_region" {
   description = "AWS Region to be used"
   type = string
-  default = "us-east-1"
+  default = "us-east-2"
 
   validation {
   condition = can(regex("[a-z][a-z]-[a-z]+-[1-9]", var.aws_region))
@@ -96,26 +96,36 @@ variable "infrastructure_db_password" {
 variable "infrastructure_controller_count" {
   description = "The number of ec2 instances for controller"
   type = number
-  default = 1
+  default = 2
 }
 
-variable "infrastructure_controller_type" {
-  description = "The controller instance type"
+variable "infrastructure_controller_instance_type" {
+  description = "Controller instance type"
   type = string
   default = "m5a.xlarge"
+}
+
+variable "infrastructure_controller_ami" {
+  description = "Controller AMI"
+  type = string
 }
 
 # EDA variables
 variable "infrastructure_eda_count" {
   description = "The number of EDA instances"
   type = number
-  default = 0
+  default = 1
 }
 
-variable "infrastructure_eda_type" {
+variable "infrastructure_eda_instance_type" {
   description = "The eda instance type"
   type = string
   default = "m5a.xlarge"
+}
+
+variable "infrastructure_eda_ami" {
+  description = "Even Driven Ansible AMI"
+  type = string
 }
 
 # Execution variables
@@ -125,25 +135,33 @@ variable "infrastructure_execution_count" {
   default = 0
 }
 
-variable "infrastructure_execution_type" {
+variable "infrastructure_execution_instance_type" {
   description = "The execution instance type"
   type = string
   default = "m5a.xlarge"
+}
+variable "infrastructure_execution_ami" {
+  description = "Execution AMI"
+  type = string
 }
 
 # Hub variables
 variable "infrastructure_hub_count" {
   description = "The number of ec2 instances for hub"
   type = number
-  default = 0
+  default = 1
 }
 
-variable "infrastructure_hub_type" {
+variable "infrastructure_hub_instance_type" {
   description = "The hub instance type"
   type = string
   default = "m5a.large"
 }
 
+variable "infrastructure_hub_ami" {
+  description = "Hub AMI"
+  type = string
+}
 variable "infrastructure_ssh_private_key" {
   description = "Private ssh key file path."
   type = string

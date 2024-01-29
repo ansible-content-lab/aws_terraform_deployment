@@ -35,9 +35,9 @@ variable "vpc_security_group_ids" {
 
 variable "key_pair_name" {
   description = "(Optional) Key name of the Key Pair to use for the instance"
-  type      = string
-  nullable  = true
-  default   = null
+  type = string
+  nullable = true
+  default = null
 }
 
 variable "persistent_tags" {
