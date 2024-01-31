@@ -42,7 +42,7 @@ resource "terraform_data" "aap_infrastructure_sshkey" {
       private_key = file(var.infrastructure_ssh_private_key)
   }
   provisioner "file" {
-    source = "${var.infrastructure_ssh_private_key}"
+    source = var.infrastructure_ssh_private_key
     destination = "/home/${var.infrastructure_admin_username}/.ssh/infrastructure_ssh_private_key.pem"
   }
   provisioner "remote-exec" {

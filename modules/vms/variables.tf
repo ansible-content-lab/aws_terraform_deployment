@@ -7,13 +7,21 @@ variable "deployment_id" {
   }
 }
 
-variable "instance_name_suffix" {}
-variable "vm_name_prefix" {}
+variable "instance_name_suffix" {
+  description = "EC2 instance name suffix"
+  type = string
+}
+variable "vm_name_prefix" {
+  description = "EC2 instance name prefix"
+  type = string
+}
 variable "instance_ami" {
   description = "The AMI to use for instances"
+  type = string
 }
 variable "subnet_id" {
   description = "The subnet ID in which to launch the instance (VPC)"
+  type = string
 }
 
 variable "app_tag" {

@@ -48,18 +48,6 @@ variable "infrastructure_db_engine_version" {
   default = "13.12"
 }
 
-variable "dbport" {
-  type        = number
-  default     = 5432
-  description = "The database port"
-}
-
-variable "connect_timeout" {
-  type        = number
-  description = "Maximum wait for connection, in seconds. The default is 180s. Zero or not specified means wait indefinitely."
-  default     = 180
-}
-
 variable "infrastructure_db_multi_az" {
   description = "Specifies if the RDS instance is multi-AZ"
   type = bool

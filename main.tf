@@ -14,10 +14,6 @@ terraform {
       source = "hashicorp/random"
       version = "~> 3.6.0"
     }
-    postgresql = {
-      source  = "cyrilgdn/postgresql"
-      version = ">= 1.11.0"
-    }
     aws = {
       source  = "hashicorp/aws"
       version = ">= 3.15"
@@ -103,12 +99,6 @@ module "rds" {
   vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
   infrastructure_hub_count = var.infrastructure_hub_count
   infrastructure_eda_count = var.infrastructure_eda_count
-  tags = merge(
-    {
-      Name = "aap-infrastructure-${var.deployment_id}-db"
-    },
-    local.persistent_tags
-  )
 }
 
 ########################################

@@ -90,11 +90,6 @@ variable "storage_type" {
   default = "io1"
 }
 
-variable "tags" {
-  description = "value"
-  type = map(any)
-}
-
 variable "username" {
   description = "Database instance username"
   type = string
