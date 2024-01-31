@@ -48,6 +48,18 @@ variable "infrastructure_db_engine_version" {
   default = "13.12"
 }
 
+variable "dbport" {
+  type        = number
+  default     = 5432
+  description = "The database port"
+}
+
+variable "connect_timeout" {
+  type        = number
+  description = "Maximum wait for connection, in seconds. The default is 180s. Zero or not specified means wait indefinitely."
+  default     = 180
+}
+
 variable "infrastructure_db_multi_az" {
   description = "Specifies if the RDS instance is multi-AZ"
   type = bool
@@ -96,7 +108,7 @@ variable "infrastructure_db_password" {
 variable "infrastructure_controller_count" {
   description = "The number of ec2 instances for controller"
   type = number
-  default = 2
+  default = 0
 }
 
 variable "infrastructure_controller_instance_type" {
@@ -114,7 +126,7 @@ variable "infrastructure_controller_ami" {
 variable "infrastructure_eda_count" {
   description = "The number of EDA instances"
   type = number
-  default = 1
+  default = 0
 }
 
 variable "infrastructure_eda_instance_type" {
@@ -149,7 +161,7 @@ variable "infrastructure_execution_ami" {
 variable "infrastructure_hub_count" {
   description = "The number of ec2 instances for hub"
   type = number
-  default = 1
+  default = 0
 }
 
 variable "infrastructure_hub_instance_type" {

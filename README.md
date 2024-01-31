@@ -26,7 +26,7 @@ This template performs the following actions in the order listed.
 
 ## Getting Started
 
-This section will walk through deploying the Azure infrastructure and Ansible Automation Platform.
+This section will walk through deploying the AWS infrastructure and Ansible Automation Platform.
 
 You may also download the this repository from GitHub and modify to suit your needs.
 
@@ -112,7 +112,7 @@ terraform plan -out=test-plan.tfplan
 Apply infrastructure
 
 ```bash
-terraform apply -var infrastructure_db_password=<db-password> -var aap_admin_password=<aap-admin-password> -var aap_red_hat_username=<redhat-username> -var aap_red_hat_password=<redhat-password>
+terraform apply -var infrastructure_db_password=<db-password> -var aap_admin_password=<aap-admin-password> -var aap_red_hat_username=<redhat-username> -var aap_red_hat_password=<redhat-password> -var infrastructure_controller_ami="" -var infrastructure_hub_ami="" -var infrastructure_execution_ami="" -var infrastructure_eda_ami=""
 ```
 Confirm to create infrastructure or pass in the `-auto-approve` parameter.
 

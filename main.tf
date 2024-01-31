@@ -14,6 +14,14 @@ terraform {
       source = "hashicorp/random"
       version = "~> 3.6.0"
     }
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = ">= 1.11.0"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.15"
+    }
   }
   required_version = ">= 1.5.4"
 }
@@ -30,9 +38,9 @@ resource "random_string" "deployment_id" {
   numeric = false
 }
 
-#
+########################################
 # VPC
-#
+########################################
 module "vpc" {
   depends_on = [ random_string.deployment_id ]
   source = "./modules/vpc"
@@ -61,24 +69,24 @@ resource "aws_key_pair" "admin" {
   key_name = "admin-key"
   public_key = file(var.infrastructure_ssh_public_key)
 }
-module "database" {
+
+########################################
+# RDS Instance
+########################################
+module "rds" {
   depends_on = [ module.vpc ]
-  source = "./modules/database"
+  source = "./modules/rds"
 
   deployment_id = var.deployment_id == "" ? random_string.deployment_id[0].id : var.deployment_id
   allocated_storage = var.infrastructure_db_allocated_storage
   allow_major_version_upgrade = var.infrastructure_db_allow_major_version_upgrade
   auto_minor_version_upgrade = var.infrastructure_db_auto_minor_version_upgrade
-  db_name = "controller"
-  engine = "postgres"
   engine_version = var.infrastructure_db_engine_version
-  identifier = "aap-infrastructure-${var.deployment_id}-db"
   instance_class = var.infrastructure_db_instance_class
   multi_az = var.infrastructure_db_multi_az
   db_sng_description =  "Ansible Automation Platform Subnet Group"
   db_sng_name = "aap-infrastructure-${var.deployment_id}-subnet-group"
   db_sng_subnets = values(module.vpc.infrastructure_subnets)
-
   db_sng_tags = merge(
     {
       Name = "aap-infrastructure-${var.deployment_id}-subnet-group"
@@ -89,19 +97,23 @@ module "database" {
   storage_iops = var.infrastructure_db_storage_iops
   storage_encrypted = var.infrastructure_db_storage_encrypted
   storage_type = var.infrastructure_db_storage_type
-
+  username = var.infrastructure_db_username
+  password = var.infrastructure_db_password
+  persistent_tags = local.persistent_tags
+  vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
+  infrastructure_hub_count = var.infrastructure_hub_count
+  infrastructure_eda_count = var.infrastructure_eda_count
   tags = merge(
     {
       Name = "aap-infrastructure-${var.deployment_id}-db"
     },
     local.persistent_tags
   )
-
-  username = var.infrastructure_db_username
-  password = var.infrastructure_db_password
-  persistent_tags = local.persistent_tags
-  vpc_security_group_ids = [module.vpc.infrastructure_sg_id]
 }
+
+########################################
+# Controller VM 
+########################################
 
 module "controller_vm" {
   depends_on = [ module.vpc ]
@@ -124,6 +136,9 @@ module "controller_vm" {
   aap_red_hat_password = var.aap_red_hat_password
 }
 
+########################################
+# Hub VM
+########################################
 module "hub_vm" {
   depends_on = [ module.vpc ]
   source = "./modules/vms"
@@ -145,6 +160,9 @@ module "hub_vm" {
   aap_red_hat_password = var.aap_red_hat_password
 }
 
+########################################
+# Execution VM
+########################################
 module "execution_vm" {
   depends_on = [ module.vpc ]
   source = "./modules/vms"
@@ -167,6 +185,9 @@ module "execution_vm" {
   aap_red_hat_password = var.aap_red_hat_password
 }
 
+########################################
+# Event-Driven Ansible VM
+########################################
 module "eda_vm" {
   depends_on = [ module.vpc ]
   source = "./modules/vms"
@@ -208,7 +229,9 @@ resource "terraform_data" "inventory" {
       infrastructure_db_password = var.infrastructure_db_password
       aap_red_hat_username = var.aap_red_hat_username
       aap_red_hat_password= var.aap_red_hat_password
-      aap_db_host = module.database.infrastructure_controller_rds_hostname
+      aap_controller_db_host = module.rds.infrastructure_controller_rds_hostname
+      aap_hub_db_host = module.rds.infrastructure_hub_rds_hostname
+      aap_eda_db_host = module.rds.infrastructure_eda_rds_hostname
       aap_admin_password = var.aap_admin_password
       infrastructure_admin_username = var.infrastructure_admin_username
     })

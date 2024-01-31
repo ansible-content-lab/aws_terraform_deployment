@@ -1,3 +1,13 @@
+terraform {
+  required_version = ">= 1.5.4"
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 4.0"
+    }
+  }
+}
+
 resource "aws_instance" "aap_infrastructure_vm" {
   ami = var.instance_ami
   instance_type = var.instance_type
@@ -13,7 +23,6 @@ resource "aws_instance" "aap_infrastructure_vm" {
     iops = var.infrastructure_volumes.iops
     delete_on_termination = var.infrastructure_volumes.delete_on_termination
   }
-
   tags = merge(
     {
       Name = "aap-infrastructure-${var.deployment_id}-vm-${var.vm_name_prefix}${var.instance_name_suffix}"

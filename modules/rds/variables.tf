@@ -45,18 +45,13 @@ variable "db_sng_tags" {
 variable "engine" {
   description = "The database engine to use"
   type = string
-  default = "postgress"
+  default = "postgres"
 }
 
 variable "engine_version" {
   description = "The database engine version to use"
   type = string
   default = "13.12"
-}
-
-variable "identifier" {
-  description = "The name of the RDS instance"
-  type = string
 }
 
 variable "instance_class" {
@@ -130,4 +125,14 @@ variable "deployment_id" {
 variable "persistent_tags" {
   description = "Persistent tags"
   type = map(string)
+}
+
+variable "infrastructure_hub_count" {
+  description = "The number of ec2 instances for hub"
+  type = number
+}
+
+variable "infrastructure_eda_count" {
+  description = "The number of EDA instances"
+  type = number
 }
