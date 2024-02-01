@@ -108,6 +108,7 @@ variable "infrastructure_controller_instance_type" {
 variable "infrastructure_controller_ami" {
   description = "Controller AMI"
   type = string
+  default = ""
 }
 
 # EDA variables
@@ -126,6 +127,7 @@ variable "infrastructure_eda_instance_type" {
 variable "infrastructure_eda_ami" {
   description = "Even Driven Ansible AMI"
   type = string
+  default = ""
 }
 
 # Execution variables
@@ -143,6 +145,7 @@ variable "infrastructure_execution_instance_type" {
 variable "infrastructure_execution_ami" {
   description = "Execution AMI"
   type = string
+  default = ""
 }
 
 # Hub variables
@@ -161,6 +164,7 @@ variable "infrastructure_hub_instance_type" {
 variable "infrastructure_hub_ami" {
   description = "Hub AMI"
   type = string
+  default = ""
 }
 variable "infrastructure_ssh_private_key" {
   description = "Private ssh key file path."

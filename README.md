@@ -71,6 +71,10 @@ The variables below are required for running this template
 | `infrastructure_db_username` | Username that will be the admin of the new database server. |
 | `infrastructure_db_password` | Password of the admin of the new database server. |
 | `aap_admin_password` | The admin password to create for Ansible Automation Platform application. |
+| `infrastructure_controller_ami` | The AMI for controller. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
+| `infrastructure_hub_ami` | The AMI for hub. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
+| `infrastructure_execution_ami` | The AMI for execution. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
+| `infrastructure_eda_ami` | The AMI for Even-Driven Ansible. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
 
 The variables below are optional for running this template
 
@@ -112,7 +116,7 @@ terraform plan -out=test-plan.tfplan
 Apply infrastructure
 
 ```bash
-terraform apply -var infrastructure_db_password=<db-password> -var aap_admin_password=<aap-admin-password> -var aap_red_hat_username=<redhat-username> -var aap_red_hat_password=<redhat-password> -var infrastructure_controller_ami="" -var infrastructure_hub_ami="" -var infrastructure_execution_ami="" -var infrastructure_eda_ami=""
+terraform apply -var infrastructure_db_password=<db-password> -var aap_admin_password=<aap-admin-password> -var aap_red_hat_username=<redhat-username> -var aap_red_hat_password=<redhat-password>
 ```
 Confirm to create infrastructure or pass in the `-auto-approve` parameter.
 
@@ -136,7 +140,7 @@ Attach subscription to all the VMs
 sudo subscription-manager attach --pool=<pool-id>
 ```
 
-You need to transfer local installer from your local terminal to the installer host. Execute the following command on your local terminal to copy the installer RPM, which is available for download at this location [AAP installer][aap-installer]
+You need to transfer local installer from your local terminal to the installer host. Execute the following command on your local terminal to copy the installer RPM, which is available for download at this location [AAP installer][aap-installer]. Download x86_64 RPM package for `ansible-automation-platform-installer`. 
 ```bash
 scp -i ~/.ssh/id_rsa <installer-rpm-filepath> ec2-user@<controller-public-ip>:~/.
 ```
@@ -192,4 +196,4 @@ tflint --recursive
 ```
 
 [image-builder]: https://console.redhat.com/insights/image-builder
-[aap-installer]: https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software
+[aap-installer]: https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/packages
