@@ -71,10 +71,6 @@ The variables below are required for running this template
 | `infrastructure_db_username` | Username that will be the admin of the new database server. |
 | `infrastructure_db_password` | Password of the admin of the new database server. |
 | `aap_admin_password` | The admin password to create for Ansible Automation Platform application. |
-| `infrastructure_controller_ami` | The AMI for controller. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
-| `infrastructure_hub_ami` | The AMI for hub. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
-| `infrastructure_execution_ami` | The AMI for execution. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
-| `infrastructure_eda_ami` | The AMI for Even-Driven Ansible. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
 
 The variables below are optional for running this template
 
@@ -91,6 +87,10 @@ The variables below are optional for running this template
 | `infrastructure_hub_instance_type` | The SKU which should be used for hub Virtual Machine. |
 | `infrastructure_ssh_public_key` | SSH public key path. |
 | `infrastructure_ssh_private_key` | SSH private key path. |
+| `infrastructure_controller_ami` | The AMI for controller. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
+| `infrastructure_hub_ami` | The AMI for hub. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
+| `infrastructure_execution_ami` | The AMI for execution. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
+| `infrastructure_eda_ami` | The AMI for Even-Driven Ansible. In this template currently this value set to "" as default in which case it will pick RHEL AMI automatically. |
 
 Additional variables can be found in variables.tf, modules/db/variables.tf , modules/vm/variables.tf, modules/vnet/variables.tf
 
