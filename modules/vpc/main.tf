@@ -1,6 +1,10 @@
 terraform {
   required_version = ">= 1.5.4"
   required_providers {
+    random = {
+      source = "hashicorp/random"
+      version = "~> 3.6.0"
+    }
     aws = {
       source = "hashicorp/aws"
       version = "~> 4.0"
@@ -8,9 +12,9 @@ terraform {
   }
 }
 
-#
+########################################
 # VPC
-#
+########################################
 resource "aws_vpc" "aap_infrastructure_vpc" {
   cidr_block = var.infrastructure_vpc_cidr
   enable_dns_support = true
@@ -23,9 +27,9 @@ resource "aws_vpc" "aap_infrastructure_vpc" {
   )
 }
 
-#
+########################################
 # Subnets
-#
+########################################
 
 # Declare data source for availablity zones
 data "aws_availability_zones" "availability_zone_list" {
@@ -33,7 +37,7 @@ data "aws_availability_zones" "availability_zone_list" {
 }
 
 resource "random_shuffle" "az" {
-  input        = data.aws_availability_zones.availability_zone_list.names
+  input = data.aws_availability_zones.availability_zone_list.names
   result_count = length(var.infrastructure_vpc_subnets)
 }
 
@@ -51,9 +55,10 @@ resource "aws_subnet" "aap_infrastructure_subnets" {
   )
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
-#
+
+########################################
 # Internet gateway
-#
+########################################
 resource "aws_internet_gateway" "aap_infrastructure_igw" {
   vpc_id = aws_vpc.aap_infrastructure_vpc.id
   tags = merge(
@@ -65,9 +70,9 @@ resource "aws_internet_gateway" "aap_infrastructure_igw" {
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
 
-#
-# Security group
-#
+########################################
+# Security group 
+########################################
 resource "aws_security_group" "aap_infrastructure_sg" {
   name = "aap-infrastructure-${var.deployment_id}-sg"
   description = "AAP security group"
@@ -173,9 +178,9 @@ resource "aws_security_group" "aap_infrastructure_sg" {
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
 
-#
-# Route table
-#
+########################################
+# Route table 
+########################################
 resource "aws_route_table" "aap_infrastructure_route_table" {
   vpc_id = aws_vpc.aap_infrastructure_vpc.id
   route {
@@ -191,9 +196,10 @@ resource "aws_route_table" "aap_infrastructure_route_table" {
   depends_on = [aws_vpc.aap_infrastructure_vpc]
 }
 
-#
+########################################
 # Route table association
-#
+########################################
+
 resource "aws_route_table_association" "aap_infrastructure_subnet_association" {
   for_each = { for key, subnet in aws_subnet.aap_infrastructure_subnets : key => subnet.id }
   subnet_id = each.value

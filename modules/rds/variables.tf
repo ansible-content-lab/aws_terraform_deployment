@@ -45,17 +45,13 @@ variable "db_sng_tags" {
 variable "engine" {
   description = "The database engine to use"
   type = string
+  default = "postgres"
 }
 
 variable "engine_version" {
   description = "The database engine version to use"
   type = string
   default = "13.12"
-}
-
-variable "identifier" {
-  description = "The name of the RDS instance"
-  type = string
 }
 
 variable "instance_class" {
@@ -94,11 +90,6 @@ variable "storage_type" {
   default = "io1"
 }
 
-variable "tags" {
-  description = "value"
-  type = map(any)
-}
-
 variable "username" {
   description = "Database instance username"
   type = string
@@ -116,4 +107,27 @@ variable "vpc_security_group_ids" {
   description = "List of VPC security groups to associate"
   type = list(string)
   sensitive = true
+}
+
+variable "deployment_id" {
+  description = "Creates a random string that will be used in tagging for correlating the resources used with a deployment of AAP."
+  type = string
+  validation {
+    condition = ((length(var.deployment_id) >= 2 && length(var.deployment_id)<=10) || length(var.deployment_id) == 0) && (can(regex("^[a-z]", var.deployment_id)) || var.deployment_id == "")
+    error_message = "deployment_id length should be between 2-10 chars and should contain lower case alpha chars only"
+  }
+}
+variable "persistent_tags" {
+  description = "Persistent tags"
+  type = map(string)
+}
+
+variable "infrastructure_hub_count" {
+  description = "The number of ec2 instances for hub"
+  type = number
+}
+
+variable "infrastructure_eda_count" {
+  description = "The number of EDA instances"
+  type = number
 }

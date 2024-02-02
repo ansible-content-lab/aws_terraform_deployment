@@ -15,7 +15,7 @@ output "vpc_module_outputs" {
 
 output "database_module_outputs" {
   description = "Database outputs"
-  value = module.database
+  value = module.rds
 }
 
 output "controller_vm_module_outputs" {
